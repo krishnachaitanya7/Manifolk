@@ -6,6 +6,13 @@ from dash.dependencies import Input, Output
 import dash_html_components as html
 from sqlite_db import SQLDb
 import math
+from plotly.graph_objects import Scatter3d
+from plotly import __version__
+# def get_xyz(pandas_df, datapoint_name):
+
+
+
+
 
 
 def get_plotly_fig(pandas_df, original_df):
@@ -27,9 +34,13 @@ def get_plotly_fig(pandas_df, original_df):
                                  math.ceil(original_df["Z"].max())],
 
                         )
-    fig.update_xaxes(autorange=False)
-    fig.update_yaxes(autorange=False)
+    # fig.add_trace(Scatter3d(x=[pandas_df.iloc[0]["X"]], y=[pandas_df.iloc[0]["Y"]], z=[pandas_df.iloc[0]["Z"]],
+    #                         mode='markers', marker=dict(symbol='cross')))
+    # fig.update_xaxes(autorange=False)
+    # fig.update_yaxes(autorange=False)
     # fig.update_zaxes(autorange=False)
+    # fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
+    fig.update_layout(scene_aspectmode='cube')
     fig.update_layout(
         {'height': 1000}
     )
@@ -37,6 +48,7 @@ def get_plotly_fig(pandas_df, original_df):
 
 
 if __name__ == "__main__":
+    print(f"Plotly Version {__version__}")
     sql_db = SQLDb("test", create_table=False)
     # This is a very specific test
     # TODO: This should be modified to a more generic one
@@ -70,12 +82,9 @@ if __name__ == "__main__":
         [Input('checklist', 'value'), Input('tsne_figure', 'relayoutData')])
     def update_figure(selected_labels, data):
         filtered_df = df[df["ORIGINAL_LABEL"].isin(selected_labels)]
-
         fig = get_plotly_fig(filtered_df, df)
         fig.update_layout(scene_camera=data['scene.camera'])
-
         fig.update_layout(transition_duration=500)
-
         return fig
 
 
