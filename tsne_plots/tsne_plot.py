@@ -7,12 +7,6 @@ import dash_html_components as html
 from sqlite_db import SQLDb
 import math
 from plotly.graph_objects import Scatter3d
-from plotly import __version__
-# def get_xyz(pandas_df, datapoint_name):
-
-
-
-
 
 
 def get_plotly_fig(pandas_df, original_df):
@@ -48,7 +42,6 @@ def get_plotly_fig(pandas_df, original_df):
 
 
 if __name__ == "__main__":
-    print(f"Plotly Version {__version__}")
     sql_db = SQLDb("test", create_table=False)
     # This is a very specific test
     # TODO: This should be modified to a more generic one
