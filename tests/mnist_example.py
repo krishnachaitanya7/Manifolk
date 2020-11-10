@@ -2,11 +2,13 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision import datasets, transforms, models
+from torchvision import datasets, transforms
+from torchvision.transforms import ToPILImage
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 from sqlite_db import SQLDb
+from PIL import Image
 # Below we set the device where PyTorch would be running
 # This below snippet ensures that if a GPU is present, it will use the GPU for training the model
 if torch.cuda.is_available():
@@ -104,8 +106,9 @@ def validate(loss_vector, accuracy_vector):
         all_preds.extend(pred.to('cpu').numpy())
         all_outputs.extend(view_output.to('cpu').detach().numpy())
         all_labels.extend(target.to('cpu').numpy())
-        all_ids.append(id)
-        id += 1
+        for _ in data:
+            all_ids.append(id)
+            id += 1
     X_numpy = np.array(all_outputs, dtype=np.float32)
     X_embedded = TSNE(n_components=3).fit_transform(X_numpy)
     all_labels = [str(each_label) for each_label in all_labels]
@@ -160,6 +163,14 @@ epochs = 10
 # After training for each epoch, we also validate the model
 # and printout loss and accuracy statistics
 # we save all of them in below lossv_cnn and accv_cnn lists
+save_id = 1
+for data, target in validation_loader:
+    for each_data in data:
+        im = ToPILImage()(each_data)
+        im.save(f"validation_images/{save_id}.jpg")
+        save_id += 1
+
+id = 1
 lossv_cnn, accv_cnn = [], []
 log_db = SQLDb(table_name="mnist")
 for epoch in range(1, epochs + 1):

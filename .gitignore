@@ -130,4 +130,5 @@ dmypy.json
 
 # Ignore all .db
 *.db
-tests/data
+tests/data/*
+tests/validation_images/*

@@ -10,7 +10,7 @@ from plotly.graph_objects import Scatter3d
 
 
 def get_plotly_fig(pandas_df, original_df):
-    fig = px.scatter_3d(pandas_df, x="X", y="X", z="Z", animation_frame="epoch",
+    fig = px.scatter_3d(pandas_df, x="X", y="Y", z="Z", animation_frame="epoch",
                         color="ORIGINAL_LABEL",
                         hover_data={
                             'X': False,
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     sql_db = SQLDb("test", create_table=False)
     # This is a very specific test
     # TODO: This should be modified to a more generic one
-    df = sql_db.get_pandas_frame("[mnist_2020-11-08-22:59:17]")
+    df = sql_db.get_pandas_frame("[mnist_2020-11-09-18:42:59]")
     fig = get_plotly_fig(df, df)
 
     options = [
@@ -81,4 +81,4 @@ if __name__ == "__main__":
         return fig
 
 
-    app.run_server(debug=True)
+    app.run_server(debug=False)
