@@ -62,7 +62,7 @@ if __name__ == "__main__":
     options = [
         {'label': k, 'value': k} for k in df["ORIGINAL_LABEL"].unique()
     ]
-    app = dash.Dash(external_stylesheets=external_stylesheets)
+    app = dash.Dash()
     app.layout = html.Div(children=[
         dcc.Graph(
             id="tsne_figure",
