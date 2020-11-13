@@ -2,6 +2,7 @@
 import dash
 import plotly.express as px
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import dash_html_components as html
 from sqlite_db import SQLDb
@@ -9,7 +10,7 @@ import math
 from sklearn.metrics import accuracy_score
 from plotly.graph_objects import Scatter3d
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [dbc.themes.MINTY]
 
 
 def get_plotly_fig(pandas_df, original_df):
