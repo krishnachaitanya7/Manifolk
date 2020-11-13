@@ -1,4 +1,3 @@
-# references: https://plotly.com/python/sliders/
 import dash
 import plotly.express as px
 import dash_core_components as dcc
