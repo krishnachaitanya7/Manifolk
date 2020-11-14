@@ -65,11 +65,9 @@ if __name__ == "__main__":
         [
             dbc.Row([
                 dbc.Col([
-                    html.H2("Manifolk: 3D TSNE graphs for every epoch using Plotly, Dash and MySQLite")
+                    html.H2("Manifolk: 3D TSNE graphs for every epoch using Plotly, Dash and MySQLite"),
+                    html.A("(Source code)", href="https://github.com/krishnachaitanya7/Manifolk")
                 ], width=True),
-                # dbc.Col([
-                #     html.Img(src="assets/MIT-logo-red-gray-72x38.svg", alt="MIT Logo", height="30px"),
-                # ], width=1)
             ], align="end"),
             html.Hr(),
             dbc.Row([
