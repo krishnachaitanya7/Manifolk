@@ -9,8 +9,6 @@ import math
 from sklearn.metrics import accuracy_score
 from plotly.graph_objects import Scatter3d
 
-external_stylesheets = [dbc.themes.MINTY]
-
 
 def get_plotly_fig(pandas_df, original_df):
     fig = px.scatter_3d(pandas_df, x="X", y="Y", z="Z",
@@ -62,53 +60,67 @@ if __name__ == "__main__":
     options = [
         {'label': k, 'value': k} for k in df["ORIGINAL_LABEL"].unique()
     ]
-    app = dash.Dash()
-    app.layout = html.Div(children=[
-        dcc.Graph(
-            id="tsne_figure",
-            figure=fig),
-        # Slider
-        dcc.Slider(
-            id="epoch_slider",
-            min=df["epoch"].min(),
-            max=df["epoch"].max(),
-            value=df["epoch"].max(),
-            marks={f'{df["epoch"].min()}': 'Epoch:'},
-            tooltip={'always_visible': True, 'placement': 'bottom'}
-        ),
-        # dropdown
-        html.P([
-            html.Label("Select Labels"),
-            dcc.Checklist(
-                id="checklist",
-                options=options,
-                value=[options[0]['value']],
-                labelStyle={'display': 'inline-block'}
-            )
-        ]),
-        # Accuracy Info
-        html.Label("Accuracy wrto current settings:"),
-        html.Div(id='accuracy_info', style={'whiteSpace': 'pre-line'}),
-        # Trace Path
-        html.Label("Mark Unique Datapoint"),
-        html.Br(),
-        dcc.Input(
-            id="input_UID",
-            type="text",
-            placeholder="Input DATAPOINT_NAME",
-        ),
-        dcc.RadioItems(
-            id="yes_no_radiobutton",
-            options=[
-                {'label': 'YES', 'value': 'YES', 'disabled': True},
-                {'label': 'NO', 'value': 'NO', 'disabled': True}
-            ],
-            value='NO',
-            labelStyle={'display': 'inline-block'}
-        )
+    app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
+    app.layout = dbc.Container(
+        [
+            dbc.Row([
+                dbc.Col([
+                    html.H2("Manifolk: 3D TSNE graphs for every epoch using Plotly, Dash and MySQLite")
+                ], width=True),
+                # dbc.Col([
+                #     html.Img(src="assets/MIT-logo-red-gray-72x38.svg", alt="MIT Logo", height="30px"),
+                # ], width=1)
+            ], align="end"),
+            html.Hr(),
+            dbc.Row([
+                dbc.Col([
+                    html.Div([
+                        html.H5("Accuracy Under the current Settings"),
+                        html.Strong(id='accuracy_info', style={'whiteSpace': 'pre-line'}),
+                        html.H5("Mark Unique Datapoint"),
+                        dcc.Input(
+                            id="input_UID",
+                            type="text",
+                            placeholder="Input DATAPOINT_NAME",
+                        ),
+                        html.P("Is the datapoint available in graph in the current setting?"),
+                        dcc.RadioItems(
+                            id="yes_no_radiobutton",
+                            options=[
+                                {'label': 'YES', 'value': 'YES', 'disabled': True},
+                                {'label': 'NO', 'value': 'NO', 'disabled': True}
+                            ],
+                            value='NO',
+                            labelStyle={'display': 'inline-block'}
+                        ),
+                        html.H5("Select Labels to be plotted:"),
+                        dcc.Checklist(
+                            id="checklist",
+                            options=options,
+                            value=[options[0]['value']],
+                            labelStyle={'display': 'inline-block'}
+                        )
+                    ])
+                ], width=3),
+                dbc.Col([
+                    dcc.Graph(
+                        id="tsne_figure",
+                        figure=fig),
+                    dcc.Slider(
+                        id="epoch_slider",
+                        min=df["epoch"].min(),
+                        max=df["epoch"].max(),
+                        value=df["epoch"].max(),
+                        marks={f'{df["epoch"].min()}': 'Epoch:'},
+                        tooltip={'always_visible': True, 'placement': 'bottom'}
+                    ),
+                ], width=True)
+            ]),
 
-    ])
 
+        ],
+        fluid=True
+    )
 
     @app.callback(
         [Output('tsne_figure', 'figure'), Output('accuracy_info', 'children'), Output('yes_no_radiobutton', 'value')],
@@ -138,6 +150,5 @@ if __name__ == "__main__":
             set_radio_button = "NO"
 
         return fig, f"{accuracy:.2f}%", set_radio_button
-
 
     app.run_server(debug=False)
