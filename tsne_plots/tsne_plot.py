@@ -60,7 +60,7 @@ if __name__ == "__main__":
     options = [
         {'label': k, 'value': k} for k in df["ORIGINAL_LABEL"].unique()
     ]
-    app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
+    app = dash.Dash(__name__, external_stylesheets=[dbc.themes.UNITED])
     app.layout = dbc.Container(
         [
             dbc.Row([
@@ -75,30 +75,29 @@ if __name__ == "__main__":
             dbc.Row([
                 dbc.Col([
                     html.Div([
-                        html.H5("Accuracy Under the current Settings"),
+                        html.H5("Accuracy Under the current Settings", style={"text-decoration": "underline"}),
                         html.Strong(id='accuracy_info', style={'whiteSpace': 'pre-line'}),
-                        html.H5("Mark Unique Datapoint"),
-                        dcc.Input(
+                        html.H5("Mark Unique Datapoint", style={"text-decoration": "underline"}),
+                        dbc.Input(
                             id="input_UID",
                             type="text",
                             placeholder="Input DATAPOINT_NAME",
                         ),
-                        html.P("Is the datapoint available in graph in the current setting?"),
-                        dcc.RadioItems(
-                            id="yes_no_radiobutton",
-                            options=[
-                                {'label': 'YES', 'value': 'YES', 'disabled': True},
-                                {'label': 'NO', 'value': 'NO', 'disabled': True}
-                            ],
-                            value='NO',
-                            labelStyle={'display': 'inline-block'}
+                        dbc.FormText("Input the point's DATAPOINT_NAME you want to track"),
+                        dbc.FormFeedback(
+                            "That looks like a valid point present in the graph :)", valid=True
                         ),
-                        html.H5("Select Labels to be plotted:"),
-                        dcc.Checklist(
+                        dbc.FormFeedback(
+                            "Sorry, either the DATAPOINT_NAME is not present in the current setting, or it's not there in the database at all",
+                            valid=False,
+                        ),
+                        html.H5("Select Labels to be plotted:", style={"text-decoration": "underline"}),
+                        dbc.Checklist(
                             id="checklist",
                             options=options,
                             value=[options[0]['value']],
-                            labelStyle={'display': 'inline-block'}
+                            labelStyle={'display': 'inline-block'},
+                            labelCheckedStyle={"color": "green"},
                         )
                     ])
                 ], width=3),
@@ -117,13 +116,14 @@ if __name__ == "__main__":
                 ], width=True)
             ]),
 
-
         ],
         fluid=True
     )
 
+
     @app.callback(
-        [Output('tsne_figure', 'figure'), Output('accuracy_info', 'children'), Output('yes_no_radiobutton', 'value')],
+        [Output('tsne_figure', 'figure'), Output('accuracy_info', 'children'), Output("input_UID", "valid"),
+         Output("input_UID", "invalid")],
         [Input('checklist', 'value'), Input('tsne_figure', 'relayoutData'), Input('epoch_slider', 'value'),
          Input("input_UID", "value")])
     def update_figure(*vals):
@@ -149,6 +149,7 @@ if __name__ == "__main__":
         else:
             set_radio_button = "NO"
 
-        return fig, f"{accuracy:.2f}%", set_radio_button
+        return fig, f"{accuracy:.2f}%", set_radio_button == "YES", set_radio_button != "YES"
+
 
     app.run_server(debug=False)
