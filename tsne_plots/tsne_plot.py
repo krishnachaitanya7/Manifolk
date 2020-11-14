@@ -75,7 +75,7 @@ if __name__ == "__main__":
                     html.Div([
                         html.H5("Accuracy Under the current Settings", style={"text-decoration": "underline"}),
                         html.Strong(id='accuracy_info', style={'whiteSpace': 'pre-line'}),
-                        html.H5("Mark Unique Datapoint", style={"text-decoration": "underline"}),
+                        html.H5("Mark Unique Datapoint (Optional)", style={"text-decoration": "underline"}),
                         dbc.Input(
                             id="input_UID",
                             type="text",
