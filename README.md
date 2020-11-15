@@ -9,4 +9,15 @@ Manifolk is a Plotly+Dash+MySQLite web application that does exactly that. Durin
 ```
 ## Python API
 ## Screenshots
+### Changing Epochs
+The below screenshot shows how to change epochs and visualize the T-SNE at every epoch
+![](readme_images/changing_epochs.gif)
+
+### Changing Labels
+The below screenshot shows how to change labels
+![](readme_images/changing_labels.gif)
+
+### Marking a unique datapoint
+The below image shows how to mark a unique datapoint which you want to track across epochs and different labels in the TSNE cloud
+![](readme_images/marking_uid.gif)
 ## Use Cases
