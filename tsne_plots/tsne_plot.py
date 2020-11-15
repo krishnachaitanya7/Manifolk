@@ -73,6 +73,16 @@ if __name__ == "__main__":
             dbc.Row([
                 dbc.Col([
                     html.Div([
+                        html.H5("Select the table you want to plot", style={"text-decoration": "underline"}),
+                        # TODO: Implement dropdown feature to select among multiple training sessions
+                        dbc.DropdownMenu(
+                            [
+                                dbc.DropdownMenuItem("Item 1", id="item-1"),
+                                dbc.DropdownMenuItem("Item 2", id="item-2"),
+                            ],
+                            label="Item 1",
+                            id="dropdownmenu",
+                        ),
                         html.H5("Accuracy Under the current Settings", style={"text-decoration": "underline"}),
                         html.Strong(id='accuracy_info', style={'whiteSpace': 'pre-line'}),
                         html.H5("Mark Unique Datapoint (Optional)", style={"text-decoration": "underline"}),
