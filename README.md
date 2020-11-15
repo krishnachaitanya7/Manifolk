@@ -25,3 +25,6 @@ The below image shows how to mark a unique datapoint which you want to track acr
 ![](readme_images/marking_uid.gif)
 
 ## Use Cases
+
+## Note
+This is still a work in progress. I will keep updating the repo and by Novemeber 30 the first beta version ready to be tested will be released. I am also in lookout for more cool T-SNE visualization, so if you think you would like to add some more features, please feel free to create an issue and I will answer as soon as I can. Thanks for checking the repo out!
