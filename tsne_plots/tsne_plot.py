@@ -54,11 +54,14 @@ if __name__ == "__main__":
     sql_db = SQLDb("test", create_table=False)
     # This is a very specific test
     # TODO: This should be modified to a more generic one
-    df = sql_db.get_pandas_frame("[mnist_2020-11-09-18:42:59]")
+    df = sql_db.get_pandas_frame(sql_db.get_all_table_names()[0])
     fig = get_plotly_fig(df, df)
     fig.layout.uirevision = True
     options = [
         {'label': k, 'value': k} for k in df["ORIGINAL_LABEL"].unique()
+    ]
+    dropdown_menu_items = [
+        {'label': k, 'value': k} for k in sql_db.get_all_table_names()
     ]
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.UNITED])
     app.layout = dbc.Container(
@@ -74,14 +77,10 @@ if __name__ == "__main__":
                 dbc.Col([
                     html.Div([
                         html.H5("Select the table you want to plot", style={"text-decoration": "underline"}),
-                        # TODO: Implement dropdown feature to select among multiple training sessions
-                        dbc.DropdownMenu(
-                            [
-                                dbc.DropdownMenuItem("Item 1", id="item-1"),
-                                dbc.DropdownMenuItem("Item 2", id="item-2"),
-                            ],
-                            label="Item 1",
-                            id="dropdownmenu",
+                        dcc.Dropdown(
+                            id='select_table',
+                            options=dropdown_menu_items,
+                            value=dropdown_menu_items[0]['value']
                         ),
                         html.H5("Accuracy Under the current Settings", style={"text-decoration": "underline"}),
                         html.Strong(id='accuracy_info', style={'whiteSpace': 'pre-line'}),
@@ -133,13 +132,14 @@ if __name__ == "__main__":
         [Output('tsne_figure', 'figure'), Output('accuracy_info', 'children'), Output("input_UID", "valid"),
          Output("input_UID", "invalid")],
         [Input('checklist', 'value'), Input('tsne_figure', 'relayoutData'), Input('epoch_slider', 'value'),
-         Input("input_UID", "value")])
+         Input("input_UID", "value"), Input('select_table', 'value')])
     def update_figure(*vals):
         # selected_labels, data, value, value_uid
         selected_labels = vals[0]
         data = vals[1]
         slider_value = vals[2]
         datapoint_uid = vals[3]
+        df = sql_db.get_pandas_frame(vals[4])
         filtered_df = df[df["ORIGINAL_LABEL"].isin(selected_labels)]
         filtered_df = filtered_df.loc[filtered_df["epoch"] == slider_value]
         accuracy = get_accuracy(filtered_df)

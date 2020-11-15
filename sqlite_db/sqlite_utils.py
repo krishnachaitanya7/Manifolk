@@ -95,6 +95,5 @@ class SQLDb:
         conn.close()
         return df
 
-
     def close_connection(self):
         self.conn.close()
