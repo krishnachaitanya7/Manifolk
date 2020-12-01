@@ -8,11 +8,13 @@ from sqlite_db import SQLDb
 import math
 from sklearn.metrics import accuracy_score
 from plotly.graph_objects import Scatter3d
+import random
 
 
 def get_plotly_fig(pandas_df, original_df):
     fig = px.scatter_3d(pandas_df, x="X", y="Y", z="Z",
                         color="ORIGINAL_LABEL",
+                        color_discrete_sequence=color_sequence,
                         hover_data={
                             'X': False,
                             'Y': False,
@@ -51,6 +53,8 @@ def get_uid_xyz(input_df, uid):
 
 
 if __name__ == "__main__":
+    r = lambda: random.randint(0, 255)
+    color_sequence = ['#%02X%02X%02X' % (r(),r(),r()) for _ in range(102)]
     sql_db = SQLDb("test", create_table=False)
     # This is a very specific test
     # TODO: This should be modified to a more generic one

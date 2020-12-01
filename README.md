@@ -26,5 +26,9 @@ The below image shows how to mark a unique datapoint which you want to track acr
 
 ## Use Cases
 
-## Note
-This is still a work in progress. I will keep updating the repo and by November 30 the first beta version ready to be tested will be released. I am also in a lookout for more cool T-SNE visualization, so if you think you would like to add some more features, please feel free to create an issue and I will answer as soon as I can. Thanks for checking the repo out!
+## Run Instructions
+To run the TSNE-GUI plot:
+```bash
+cd $CURRENT_PROJECT_WORKSPACE
+python tsne_plot.py
+```
