@@ -58,10 +58,11 @@ if __name__ == "__main__":
     # This is a very specific test
     # TODO: This should be modified to a more generic one
     df = sql_db.get_pandas_frame(sql_db.get_all_table_names()[0])
-    fig = get_plotly_fig(df, df)
-    fig.layout.uirevision = True
     unique_colors = len(df["ORIGINAL_LABEL"].unique())
     color_sequence = ['#%02X%02X%02X' % (r(), r(), r()) for _ in range(unique_colors)]
+    fig = get_plotly_fig(df, df)
+    fig.layout.uirevision = True
+
     options = [
         {'label': k, 'value': k} for k in df["ORIGINAL_LABEL"].unique()
     ]
