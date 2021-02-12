@@ -2,25 +2,25 @@
 # https://github.com/damnever/pigar
 
 # tsne_plots/tsne_plot.py: 5
-dash == 1.17.0
+dash>=1.17.0
 
 # tsne_plots/tsne_plot.py: 4
-dash_bootstrap_components == 0.10.7
+dash_bootstrap_components>=0.10.7
 
 # tsne_plots/tsne_plot.py: 3
-dash_core_components == 1.13.0
+dash_core_components>=1.13.0
 
 # tsne_plots/tsne_plot.py: 6
-dash_html_components == 1.1.1
+dash_html_components>=1.1.1
 
 # sqlite_db/sqlite_utils.py: 3
-numpy == 1.19.2
+numpy>=1.19.2
 
 # sqlite_db/sqlite_utils.py: 4
-pandas == 1.1.3
+pandas>=1.1.3
 
 # tsne_plots/tsne_plot.py: 2,10
-plotly == 4.12.0
+plotly>=4.12.0
 
 # tsne_plots/tsne_plot.py: 9
-scikit_learn == 0.23.2
+scikit_learn>=0.23.2
