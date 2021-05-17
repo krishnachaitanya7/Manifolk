@@ -10,6 +10,8 @@ from sklearn.metrics import accuracy_score
 from plotly.graph_objects import Scatter3d
 import random
 
+color_sequence = None
+
 
 def get_plotly_fig(pandas_df, original_df):
     fig = px.scatter_3d(
@@ -52,7 +54,7 @@ def get_uid_xyz(input_df, uid):
 
 def main():
     r = lambda: random.randint(0, 255)
-    sql_db = SQLDb("test", create_table=False)
+    sql_db = SQLDb(create_table=False)
     # This is a very specific test
     # TODO: This should be modified to a more generic one
     df = sql_db.get_pandas_frame(sql_db.get_all_table_names()[0])
@@ -98,7 +100,11 @@ def main():
                                     ),
                                     html.Strong(id="accuracy_info", style={"whiteSpace": "pre-line"}),
                                     html.H5("Mark Unique Datapoint (Optional)", style={"text-decoration": "underline"}),
-                                    dbc.Input(id="input_UID", type="text", placeholder="Input DATAPOINT_NAME",),
+                                    dbc.Input(
+                                        id="input_UID",
+                                        type="text",
+                                        placeholder="Input DATAPOINT_NAME",
+                                    ),
                                     dbc.FormText("Input the point's DATAPOINT_NAME you want to track"),
                                     dbc.FormFeedback(
                                         "That looks like a valid point present in the graph :)", valid=True

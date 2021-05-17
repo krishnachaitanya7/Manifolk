@@ -5,7 +5,7 @@ import pandas as pd
 
 
 class SQLDb:
-    def __init__(self, table_name, db_path="manifolk.db", create_table=True):
+    def __init__(self, table_name="", db_path="manifolk.db", create_table=True):
         # if not Path(db_path).is_file():
         #     raise Exception(f"The Database path should be a full path of a file even if it doesnt exist. "
         #                     f"A new databse will be created at that path. Please pass full file path name")
@@ -20,15 +20,17 @@ class SQLDb:
     def create_table(self):
         self.conn = sqlite3.connect(self.db_path)
         self.table_cursor = self.conn.cursor()
-        self.table_cursor.execute(f'CREATE TABLE '
-                                  f'{self.table_name} '
-                                  f'(epoch int, '
-                                  f'X real, '
-                                  f'Y real, '
-                                  f'Z real, '
-                                  f'DATAPOINT_NAME text, '
-                                  f'ORIGINAL_LABEL text, '
-                                  f'CLASSIFIED_AS_LABEL text)')
+        self.table_cursor.execute(
+            f"CREATE TABLE "
+            f"{self.table_name} "
+            f"(epoch int, "
+            f"X real, "
+            f"Y real, "
+            f"Z real, "
+            f"DATAPOINT_NAME text, "
+            f"ORIGINAL_LABEL text, "
+            f"CLASSIFIED_AS_LABEL text)"
+        )
         self.conn.commit()
 
     def sanitize_input(self, *args):
@@ -63,20 +65,24 @@ class SQLDb:
         datapoint_name = args[4]
         original_label = args[5]
         classified_label = args[6]
-        self.table_cursor.execute(f"""INSERT INTO {self.table_name} VALUES 
+        self.table_cursor.execute(
+            f"""INSERT INTO {self.table_name} VALUES 
                                     ("{epoch}",
                                      "{x}", 
                                      "{y}", 
                                      "{z}", 
                                      "{datapoint_name}", 
                                      "{original_label}", 
-                                     "{classified_label}")""")
+                                     "{classified_label}")"""
+        )
         self.conn.commit()
 
-    def insert(self, epoch: int, tsne_array: np.array, original_labels: list, predicted_labels: list,
-               datapoint_ids: list):
-        for each_point, original_label, predicted_label, datapoint_id in zip(tsne_array, original_labels,
-                                                                             predicted_labels, datapoint_ids):
+    def insert(
+        self, epoch: int, tsne_array: np.array, original_labels: list, predicted_labels: list, datapoint_ids: list
+    ):
+        for each_point, original_label, predicted_label, datapoint_id in zip(
+            tsne_array, original_labels, predicted_labels, datapoint_ids
+        ):
             x, y, z = each_point
             self.insert_entry(epoch, x, y, z, datapoint_id, original_label, predicted_label)
 

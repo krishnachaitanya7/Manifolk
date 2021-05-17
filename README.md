@@ -5,7 +5,7 @@ Manifolk is a Plotly+Dash+MySQLite web application that does exactly that. Durin
 
 ## Installation Instructions
 ```bash
-
+pip install --upgrade git+https://github.com/krishnachaitanya7/Manifolk.git
 ```
 ## Python API
 ## Screenshots
