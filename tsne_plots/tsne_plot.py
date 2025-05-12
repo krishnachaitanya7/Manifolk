@@ -170,26 +170,52 @@ def main():
         df = sql_db.get_pandas_frame(vals[4])
         filtered_df = df[df["ORIGINAL_LABEL"].isin(selected_labels)]
         filtered_df = filtered_df.loc[filtered_df["epoch"] == slider_value]
+
+        # Calculate accuracy using original labels vs. classified labels for the filtered dataset
         accuracy = get_accuracy(filtered_df)
+
+        # Generate the plotly figure using the filtered dataframe with current selection parameters
         fig = get_plotly_fig(filtered_df, df)
+
+        # Preserve the current camera view position when the figure is updated
+        # This prevents the view from resetting when filtering changes
         fig.update_layout(scene_camera=data["scene.camera"])
+
+        # Handle the case where a specific datapoint UID is provided for highlighting
         if datapoint_uid:
+            # Attempt to find the x, y, z coordinates for the specified UID in the current filtered data
             point_x, point_y, point_z = get_uid_xyz(filtered_df, datapoint_uid)
+
+            # If the point exists in the current filtered dataset
             if point_x and point_y and point_z:
+                # Add a special diamond-shaped marker to highlight the selected datapoint
                 fig.add_trace(
                     Scatter3d(x=[point_x], y=[point_y], z=[point_z], mode="markers", marker=dict(symbol="diamond"))
                 )
+                # Set flag to indicate the point was found (used for form validation feedback)
                 set_radio_button = "YES"
             else:
-                # The point doesn't exist, show it to user
+                # The point doesn't exist in the current filtered data
+                # This could be because:
+                # 1. The UID doesn't exist in the database
+                # 2. The UID exists but not in the current filtered view (wrong epoch or label)
                 set_radio_button = "NO"
         else:
+            # No UID was provided, so no specific point to highlight
             set_radio_button = "NO"
 
+        # Return multiple outputs for the callback:
+        # 1. The updated figure with new filters and possibly highlighted point
+        # 2. The accuracy percentage formatted with 2 decimal places
+        # 3. Whether the input UID is valid (for positive form feedback)
+        # 4. Whether the input UID is invalid (for negative form feedback)
         return fig, f"{accuracy:.2f}%", set_radio_button == "YES", set_radio_button != "YES"
 
+    # Start the Dash server
+    # debug=False prevents auto-reloading when code changes
     app.run_server(debug=False)
 
 
 if __name__ == "__main__":
+    # Entry point of the script when executed directly
     main()
